@@ -37,7 +37,7 @@ print(lyrics[:500])
 
 os.makedirs("../data", exist_ok=True)
 
-with open("../data/lyrics_sample.json", "w", encoding="utf-8") as f:
+with open("../data/lyrics_sample.", "w", encoding="utf-8") as f:
     json.dump(lyrics, f, ensure_ascii=False, indent=2)
 
 print("已保存到 ../data/lyrics_sample.json")
