@@ -28,7 +28,8 @@ def fetch_lyrics(song_id):
     lyric_list = data.get("data", {}).get("lrclist", [])
     for line in lyric_list:
         lyrics.append(line.get("lineLyric",""))
-    return lyrics
+        lyrics_text = "\n".join(lyrics)
+    return lyrics_text
 lyrics = fetch_lyrics("228908")
 
 print("歌词预览：")
