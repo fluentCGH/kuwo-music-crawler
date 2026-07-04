@@ -1,24 +1,13 @@
-## Day1 数据源判断：酷我音乐
+# 酷我音乐爬虫项目记录
 
-### 搜索接口
-状态：已找到
-返回类型：JSON
-是否有歌曲列表：有
-每页数量：RN=20
-总数：TOTAL=3600
-核心列表字段：abslist
+## Stage 1：单关键词多页搜索
+- 文件：crawler/kuwo_search.py
+- 输出：data/songs_stage1_jay.json
+- 结果：周杰伦 20 页，约 400 条
 
-### 已确认字段
-- 歌曲名：SONGNAME / NAME
-- 歌手名：ARTIST
-- 歌手 ID：ARTISTID
-- 歌曲 ID：DC_TARGETID
-- MUSICRID：MUSICRID
-- 专辑：ALBUM
-- 图片：hts_MVPIC
-- 原始 URL：可由 DC_TARGETID 构造，待验证
-
-### 未确认字段
-- 歌词
-- 歌手简介
-- 歌手图片是否可稳定使用
+## Stage 2：多关键词搜索与去重
+- 文件：crawler/kuwo_search.py
+- 输出：data/songs_stage2_favorite.json
+- 关键词：周杰伦、林俊杰、陈奕迅、邓紫棋、孙燕姿
+- 理论 300 条，去重后 299 条
+- 重复歌曲：邓紫棋关键词下的《手心的蔷薇》，已在林俊杰关键词下出现
