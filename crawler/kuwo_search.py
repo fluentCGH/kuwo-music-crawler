@@ -4,20 +4,29 @@ import requests
 import json
 import time
 import os
+from pathlib import Path
+
 url="https://kuwo.cn/search/searchMusicBykeyWord"
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+input_path = BASE_DIR / "data" / "artist_names_stage1.json"
+
+with open(input_path,"r",encoding="utf-8") as f:
+    keywords=json.load(f)
 
 headers={
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0",
     "Referer":"https://kuwo.cn"
 }
 
-keywords=["周杰伦","林俊杰","陈奕迅","邓紫棋","孙燕姿"]
+
+
 songs=[]
 seen_song_ids=set()
 duplicate_songs=[]
 
 for keyword in keywords:
-    for page in range(3):
+    for page in range(1):
         params={
             "vipver": "1",
             "client": "kt",
@@ -41,7 +50,7 @@ for keyword in keywords:
 
         items = data.get("abslist", [])
 
-        print("正在爬",keyword,"的第", page, "页，本页数量：", len(items))
+        print("正在爬",keyword,"的第", page+1, "页，本页数量：", len(items))
 
         for item in items:
             song_id=item.get("DC_TARGETID","")
