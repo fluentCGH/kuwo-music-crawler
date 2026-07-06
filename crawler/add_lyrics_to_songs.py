@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 input_path = BASE_DIR / "data" / "songs_stage2_favorite.json"
 output_path = BASE_DIR / "data" / "songs_stage3_lyrics.json"
+deleted_path = BASE_DIR / "data" / "deleted_lyrics_songs.json"      
 
 def load_songs():
     
@@ -53,26 +54,71 @@ def fetch_lyrics(song_id):
     lyrics_text = "\n".join(lyrics)
     return lyrics_text
 
-for i,song in enumerate(songs):
-    if song.get("lyrics"):
-        print("已有歌词，跳过：", song["song_name"])
-        continue
-    try:
-        lyrics0=fetch_lyrics(song["song_id"])
-    except Exception as e:
-        print("歌词获取失败：", song["song_name"], song["song_id"], e)
-        lyrics0 = ""
-    songs[i]["lyrics"]=lyrics0
 
+valid_songs = []
+deleted_lyrics_songs = []
+
+for i, song in enumerate(songs):
+    song["song_order"] = i + 1
+    song_name = song.get("song_name", "")
+    song_id = song.get("song_id", "")
+
+    if song.get("lyrics"):
+        print("已有歌词，跳过：", song_name)
+        valid_songs.append(song)
+    else:
+
+        try:
+            lyrics0 = fetch_lyrics(song_id)
+        except Exception as e:
+            print("歌词获取失败，删除：", song_name, song_id, e)
+
+            deleted_lyrics_songs.append({
+                "song_name": song_name,
+                "song_id": song_id,
+                "reason": "lyrics_request_failed"
+            })
+
+        else:
+            if lyrics0.strip() == "":
+                print("歌词为空，删除：", song_name, song_id)
+
+                deleted_lyrics_songs.append({
+                    "song_name": song_name,
+                    "song_id": song_id,
+                    "reason": "lyrics_empty"
+                })
+
+            else:
+                song["lyrics"] = lyrics0
+                valid_songs.append(song)
+
+    
     if (i + 1) % 20 == 0:
-        os.makedirs("../data",exist_ok=True)
+        temp_songs = valid_songs + songs[i + 1:]
+
         with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(songs, f, ensure_ascii=False, indent=2)
+            json.dump(temp_songs, f, ensure_ascii=False, indent=2)
+
+        with open(deleted_path, "w", encoding="utf-8") as f:
+            json.dump(deleted_lyrics_songs, f, ensure_ascii=False, indent=2)
+
         print("阶段性保存：", i + 1)
+        print("当前保留歌曲数：", len(valid_songs))
+        print("当前删除无歌词歌曲数：", len(deleted_lyrics_songs))
 
     time.sleep(0.5)
 
 
-with open(output_path,"w",encoding="utf-8") as f:
-    json.dump(songs,f,ensure_ascii=False,indent=2)
-print("已全部保存保存到 ../data/songs_stage3_lyrics.json")
+
+with open(output_path, "w", encoding="utf-8") as f:
+    json.dump(valid_songs, f, ensure_ascii=False, indent=2)
+
+deleted_path = BASE_DIR / "data" / "deleted_lyrics_songs.json"
+with open(deleted_path, "w", encoding="utf-8") as f:
+    json.dump(deleted_lyrics_songs, f, ensure_ascii=False, indent=2)
+
+print("已全部保存到：", output_path)
+print("最终保留歌曲数：", len(valid_songs))
+print("最终删除无歌词歌曲数：", len(deleted_lyrics_songs))
+

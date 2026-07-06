@@ -61,20 +61,32 @@ def fetch_artist_info(artist_id):
     html_text=response.text
     target_script=find_singer_script(html_text)
 
+
+
     if target_script=="":
         print("没有找到 singerInfo，方法失败")
         return None
     else:
         section=target_script
+        artist_intro=extract_string_field(section, "info")
+        music_num=extract_number_field(section, "musicNum")
+        birthday=extract_string_field(section, "birthday")
+        country=extract_string_field(section, "country")
+        if artist_intro=="" or str(music_num)=="0":
+            return None
+        if birthday=="":
+            birthday="暂无信息"
+        if country=="":
+            country="暂无信息"
         artist={
             "artist_id": extract_number_field(section, "id"),
             "artist_name": extract_string_field(section, "name"),
             "artist_image": extract_string_field(section, "pic300"),
-            "artist_intro": extract_string_field(section, "info"),
+            "artist_intro": artist_intro,
             "artist_url": artist_url,
-            "birthday": extract_string_field(section, "birthday"),
-            "country": extract_string_field(section, "country"),
-            "music_num": extract_number_field(section, "musicNum"),
+            "birthday": birthday,
+            "country": country,
+            "music_num": music_num,
             "album_num": extract_number_field(section, "albumNum"),
         }
     return artist

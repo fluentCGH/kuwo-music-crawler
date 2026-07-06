@@ -7,9 +7,11 @@ import os
 from pathlib import Path
 
 url="https://kuwo.cn/search/searchMusicBykeyWord"
+DEFAULT_SONG_IMAGE = "https://h5static.kuwo.cn/upload/image/4f768883f75b17a426c95b93692d98bec7d3ee9240f77f5ea68fc63870fdb050.png"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 input_path = BASE_DIR / "data" / "artist_names_stage1.json"
+output_path = BASE_DIR / "data" / "songs_stage2_favorite.json"
 
 with open(input_path,"r",encoding="utf-8") as f:
     keywords=json.load(f)
@@ -64,19 +66,30 @@ for keyword in keywords:
                     "song_id": song_id,
                 })
                 continue
+            
+            artist_id=str(item.get("ARTISTID","")).strip()
+            album= item.get("ALBUM", "")
+            image_url=item.get("hts_MVPIC", "")
 
+            if artist_id=="" or artist_id=="0":
+                continue
             seen_song_ids.add(song_id)
+
+            if album=="":
+                album="无专辑归属"
+            if image_url=="":
+                image_url=DEFAULT_SONG_IMAGE
             song = {
                 "song_order":len(songs) + 1,
                 "song_name": item.get("SONGNAME") or item.get("NAME", ""),
                 "keyword":keyword,
                 "artist_name": item.get("ARTIST", ""),
-                "artist_id": item.get("ARTISTID", ""),
+                "artist_id": artist_id,
                 "song_id": song_id,
                 "musicrid": item.get("MUSICRID", ""),
-                "album": item.get("ALBUM", ""),
+                "album": album,
                 "duration": item.get("DURATION", ""),
-                "image_url": item.get("hts_MVPIC", ""),
+                "image_url": image_url,
                 "source_url": f"https://www.kuwo.cn/play_detail/{song_id}",
             }
             songs.append(song)
@@ -84,12 +97,11 @@ for keyword in keywords:
 
 print("爬取完成，歌曲数量：", len(songs))
 
-os.makedirs("../data", exist_ok=True)
 
-with open("../data/songs_stage2_favorite.json","w",encoding="utf-8") as f:
+with open(output_path,"w",encoding="utf-8") as f:
     json.dump(songs,f,ensure_ascii=False,indent=2)
 
-print("已保存到 ../data/songs_stage2_favorite.json")
+print("已保存到",output_path)
 
 print("重复跳过数量：", len(duplicate_songs))
 keyword_count = {}

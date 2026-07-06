@@ -1,13 +1,23 @@
-# 酷我音乐爬虫项目记录
+# 数据提取链路
 
-## Stage 1：单关键词多页搜索
-- 文件：crawler/kuwo_search.py
-- 输出：data/songs_stage1_jay.json
-- 结果：周杰伦 20 页，约 400 条
+### 1. 歌手列表页 Playwright 抓名字
+##### #file:=="fetch_kuwo_artist_seeds_playwright.py"==
+##### #input:None
+##### #output:"artist_names_stage1.json"
 
-## Stage 2：多关键词搜索与去重
-- 文件：crawler/kuwo_search.py
-- 输出：data/songs_stage2_favorite.json
-- 关键词：周杰伦、林俊杰、陈奕迅、邓紫棋、孙燕姿
-- 理论 300 条，去重后 299 条
-- 重复歌曲：邓紫棋关键词下的《手心的蔷薇》，已在林俊杰关键词下出现
+    
+### 2.用歌手名作为 keyword 搜歌曲
+##### #file:=="kuwo_search.py"==
+##### #input:"artist_names_stage1.json"
+##### #output:"songs_stage2_favorite.json"    
+    
+### 3.歌曲信息中补充歌词
+##### #file:=="add_lyrics_to_songs.py"==
+##### #input:"songs_stage2_favorite.json"
+##### #output:"songs_stage3_lyrics.json"
+    
+### 4.从歌曲 artist_id 反查歌手详情
+##### #asist:=="fetch_kuwo_artist.py"==
+##### #file:=="crawl_kuwo_artists.py"==
+##### #input:"songs_stage3_lyrics.json"
+##### #output:"artists_stage1.json"
