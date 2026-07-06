@@ -33,3 +33,4 @@ for song in songs:
 with open(output_path,"w",encoding="utf-8") as f:
     json.dump(artists,f,ensure_ascii=False,indent=2)
 print("已全部保存保存到",output_path)
+print("共计：",len(artists))
