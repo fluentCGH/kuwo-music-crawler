@@ -1,0 +1,226 @@
+{% extends "music/base.html" %}
+
+{% block title %}
+搜索 - Changmusic
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">搜索</h1>
+
+            <p style="color: #6b7280; margin-top: 8px;">
+                请选择搜索歌曲或歌手，关键词长度不能超过20个字符。
+            </p>
+        </div>
+    </div>
+
+    <form method="get" class="search-page-form">
+        <div class="search-type-group">
+            <label class="search-type-option">
+                <input
+                    type="radio"
+                    name="search_type"
+                    value="song"
+                    {% if search_type == "song" %}checked{% endif %}
+                >
+                搜索歌曲
+            </label>
+
+            <label class="search-type-option">
+                <input
+                    type="radio"
+                    name="search_type"
+                    value="artist"
+                    {% if search_type == "artist" %}checked{% endif %}
+                >
+                搜索歌手
+            </label>
+        </div>
+
+        <div class="search-box">
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                maxlength="20"
+                placeholder="请输入20个字符以内的关键词"
+                required
+            >
+
+            <button type="submit">搜索</button>
+        </div>
+    </form>
+
+    {% if query_truncated %}
+        <p class="form-error">
+            输入内容超过20个字符，系统已截取前20个字符。
+        </p>
+    {% endif %}
+</div>
+
+{% if query %}
+
+<div class="card">
+    <div class="section-head">
+        <h2 class="section-title">
+            {% if search_type == "artist" %}
+                歌手搜索结果
+            {% else %}
+                歌曲搜索结果
+            {% endif %}
+        </h2>
+    </div>
+
+    <div class="search-summary">
+        <span>
+            搜索关键词：<strong>{{ query }}</strong>
+        </span>
+
+        <span>
+            共找到 <strong>{{ result_count }}</strong> 条结果
+        </span>
+
+        <span>
+            后端搜索耗时：
+            <strong>{{ search_time|floatformat:6 }}</strong> 秒
+        </span>
+    </div>
+
+    {% if search_type == "artist" %}
+
+        <div class="artist-grid">
+            {% for artist in page_obj %}
+                <a
+                    class="artist-card"
+                    href="{% url 'music:artist_detail' artist.id %}"
+                >
+                    <img
+                        class="artist-avatar"
+                        src="{{ artist.artist_image }}"
+                        alt="{{ artist.artist_name }}"
+                    >
+
+                    <div class="artist-name">
+                        {{ artist.artist_name }}
+                    </div>
+
+                    <div class="artist-meta">
+                        {{ artist.country }}
+                    </div>
+                </a>
+            {% empty %}
+                <p>没有找到相关歌手。</p>
+            {% endfor %}
+        </div>
+
+    {% else %}
+
+        <div class="song-card-grid">
+            {% for song in page_obj %}
+                <a
+                    class="song-card"
+                    href="{% url 'music:song_detail' song.id %}"
+                >
+                    <img
+                        class="song-card-image"
+                        src="{{ song.image_url }}"
+                        alt="{{ song.song_name }}"
+                    >
+
+                    <div class="song-card-name">
+                        {{ song.song_name }}
+                    </div>
+
+                    <div class="song-card-meta">
+                        {{ song.artist_name }}
+                    </div>
+                </a>
+            {% empty %}
+                <p>没有找到相关歌曲。</p>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+    {% if result_count > 0 %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a
+                    href="?q={{ query|urlencode }}&search_type={{ search_type }}&page=1"
+                >
+                    首页
+                </a>
+
+                <a
+                    href="?q={{ query|urlencode }}&search_type={{ search_type }}&page={{ page_obj.previous_page_number }}"
+                >
+                    上一页
+                </a>
+            {% endif %}
+
+            <span class="current">
+                第 {{ page_obj.number }} 页 /
+                共 {{ page_obj.paginator.num_pages }} 页
+            </span>
+
+            {% if page_obj.has_next %}
+                <a
+                    href="?q={{ query|urlencode }}&search_type={{ search_type }}&page={{ page_obj.next_page_number }}"
+                >
+                    下一页
+                </a>
+
+                <a
+                    href="?q={{ query|urlencode }}&search_type={{ search_type }}&page={{ page_obj.paginator.num_pages }}"
+                >
+                    末页
+                </a>
+            {% endif %}
+
+            <form method="get" class="page-jump-form">
+                <input type="hidden" name="q" value="{{ query }}">
+                <input
+                    type="hidden"
+                    name="search_type"
+                    value="{{ search_type }}"
+                >
+
+                <label for="search-page-number">跳转到</label>
+
+                <input
+                    id="search-page-number"
+                    type="number"
+                    name="page"
+                    min="1"
+                    max="{{ page_obj.paginator.num_pages }}"
+                    value="{{ page_obj.number }}"
+                    required
+                >
+
+                <span>页</span>
+                <button type="submit">确定</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
+
+{% else %}
+
+<div class="card">
+    <h2 class="section-title">搜索字段说明</h2>
+
+    <p>
+        搜索歌曲时，将从歌曲名、歌手名和歌词中查找关键词。
+    </p>
+
+    <p>
+        搜索歌手时，将从歌手名和歌手简介中查找关键词。
+    </p>
+</div>
+
+{% endif %}
+
+{% endblock %}

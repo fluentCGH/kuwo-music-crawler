@@ -1,0 +1,172 @@
+{% extends "music/base.html" %}
+
+{% block title %}
+{{ artist.artist_name }} - Changmusic
+{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{% url 'music:artist_list' %}">← 返回歌手列表</a>
+
+<div class="card">
+    <div class="artist-hero">
+        <div>
+            <img class="artist-large-img" src="{{ artist.artist_image }}" alt="{{ artist.artist_name }}">
+        </div>
+
+        <div>
+            <h1 class="song-title">{{ artist.artist_name }}</h1>
+
+            <div class="song-subtitle">
+                {{ artist.country }} · {{ artist.birthday }}
+            </div>
+
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">酷我歌手ID</div>
+                    <div class="meta-value">{{ artist.kuwo_artist_id }}</div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">国家/地区</div>
+                    <div class="meta-value">{{ artist.country }}</div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">生日</div>
+                    <div class="meta-value">{{ artist.birthday }}</div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">系统收录歌曲数</div>
+                    <div class="meta-value">{{ song_count }}</div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">酷我歌曲数</div>
+                    <div class="meta-value">{{ artist.music_num }}</div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">酷我专辑数</div>
+                    <div class="meta-value">{{ artist.album_num }}</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a class="section-link" href="{{ artist.artist_url }}" target="_blank">
+                    打开酷我歌手原始页面
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="section-head">
+        <h2 class="section-title">该歌手相关歌曲</h2>
+    </div>
+
+    <div class="song-card-grid">
+        {% for song in page_obj %}
+            <a
+                class="song-card"
+                href="{% url 'music:song_detail' song.id %}"
+            >
+                <img
+                    class="song-card-image"
+                    src="{{ song.image_url }}"
+                    alt="{{ song.song_name }}"
+                >
+
+                <div class="song-card-name">
+                    {{ song.song_name }}
+                </div>
+            </a>
+
+        {% empty %}
+            <p>暂无关联歌曲。</p>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">首页</a>
+            <a href="?page={{ page_obj.previous_page_number }}">
+                上一页
+            </a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ page_obj.number }} 页 /
+            共 {{ page_obj.paginator.num_pages }} 页
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">
+                下一页
+            </a>
+
+            <a href="?page={{ page_obj.paginator.num_pages }}">
+                末页
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+    <div class="artist-intro">
+        {{ artist.artist_intro }}
+    </div>
+</div>
+
+<div class="card">
+    <div class="section-head">
+        <h2 class="section-title">该歌手相关歌曲</h2>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>歌曲名</th>
+                <th>专辑</th>
+                <th>时长</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for song in page_obj %}
+                <tr>
+                    <td>
+                        <a href="{% url 'music:song_detail' song.id %}">
+                            {{ song.song_name }}
+                        </a>
+                    </td>
+                    <td>{{ song.album }}</td>
+                    <td>{{ song.duration }} 秒</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">暂无关联歌曲。</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">首页</a>
+            <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ page_obj.number }} 页 / 共 {{ page_obj.paginator.num_pages }} 页
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">末页</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

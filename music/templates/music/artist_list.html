@@ -1,0 +1,129 @@
+{% extends "music/base.html" %}
+
+{% block title %}
+歌手列表 - Changmusic
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">歌手列表</h1>
+
+            <p style="color: #6b7280; margin-top: 8px;">
+                浏览 Changmusic 收录的歌手信息，
+                支持按歌手名和简介关键词搜索。
+            </p>
+        </div>
+    </div>
+
+    <form method="get" class="search-box">
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            maxlength="20"
+            placeholder="输入歌手名或简介关键词"
+        >
+
+        <button type="submit">搜索</button>
+    </form>
+
+    {% if query %}
+        <p>
+            搜索关键词：
+            <strong>{{ query }}</strong>，
+            共找到 {{ artist_count }} 位歌手。
+        </p>
+    {% else %}
+        <p>当前共收录 {{ artist_count }} 位歌手。</p>
+    {% endif %}
+</div>
+
+<div class="artist-grid">
+    {% for artist in page_obj %}
+        <a
+            class="artist-card"
+            href="{% url 'music:artist_detail' artist.id %}"
+        >
+            <img
+                class="artist-avatar"
+                src="{{ artist.artist_image }}"
+                alt="{{ artist.artist_name }}"
+            >
+
+            <div class="artist-name">
+                {{ artist.artist_name }}
+            </div>
+
+            <div class="artist-meta">
+                {{ artist.country }} · {{ artist.music_num }} 首歌
+            </div>
+        </a>
+
+    {% empty %}
+        <div class="card">
+            没有找到符合条件的歌手。
+        </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?q={{ query|urlencode }}&page=1">
+            首页
+        </a>
+
+        <a href="?q={{ query|urlencode }}&page={{ page_obj.previous_page_number }}">
+            上一页
+        </a>
+    {% endif %}
+
+    <span class="current">
+        第 {{ page_obj.number }} 页 /
+        共 {{ page_obj.paginator.num_pages }} 页
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?q={{ query|urlencode }}&page={{ page_obj.next_page_number }}">
+            下一页
+        </a>
+
+        <a href="?q={{ query|urlencode }}&page={{ page_obj.paginator.num_pages }}">
+            末页
+        </a>
+    {% endif %}
+
+    <form method="get" class="page-jump-form">
+        {% if query %}
+            <input
+                type="hidden"
+                name="q"
+                value="{{ query }}"
+            >
+        {% endif %}
+
+        <label for="artist-page-number">
+            跳转到
+        </label>
+
+        <input
+            id="artist-page-number"
+            type="number"
+            name="page"
+            min="1"
+            max="{{ page_obj.paginator.num_pages }}"
+            value="{{ page_obj.number }}"
+            required
+        >
+
+        <span>页</span>
+
+        <button type="submit">
+            确定
+        </button>
+    </form>
+</div>
+
+{% endblock %}

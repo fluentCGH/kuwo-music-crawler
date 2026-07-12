@@ -1,0 +1,214 @@
+{% extends "music/base.html" %}
+{% load tz %}
+
+{% block title %}
+{{ song.song_name }} - Changmusic
+{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{% url 'music:song_list' %}">
+    ← 返回歌曲列表
+</a>
+
+<div class="detail-grid">
+
+    <div class="cover-card">
+        <img
+            class="cover-img"
+            src="{{ song.image_url }}"
+            alt="{{ song.song_name }}"
+        >
+
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="meta-label">歌曲序号</div>
+                <div class="meta-value">{{ song.song_order }}</div>
+            </div>
+
+            <div class="meta-item">
+                <div class="meta-label">时长</div>
+                <div class="meta-value">{{ song.duration }} 秒</div>
+            </div>
+
+            <div class="meta-item">
+                <div class="meta-label">酷我歌曲 ID</div>
+                <div class="meta-value">{{ song.kuwo_song_id }}</div>
+            </div>
+
+            <div class="meta-item">
+                <div class="meta-label">MusicRID</div>
+                <div class="meta-value">{{ song.musicrid }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+        <div class="card">
+            <h1 class="song-title">{{ song.song_name }}</h1>
+
+            <div class="song-subtitle">
+                {% if song.artist %}
+                    <a href="{% url 'music:artist_detail' song.artist.id %}">
+                        {{ song.artist_name }}
+                    </a>
+                {% else %}
+                    {{ song.artist_name }}
+                {% endif %}
+
+                · {{ song.album }}
+            </div>
+
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">歌手</div>
+
+                    <div class="meta-value">
+                        {% if song.artist %}
+                            <a href="{% url 'music:artist_detail' song.artist.id %}">
+                                {{ song.artist_name }}
+                            </a>
+                        {% else %}
+                            {{ song.artist_name }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">专辑</div>
+                    <div class="meta-value">{{ song.album }}</div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">搜索关键词</div>
+                    <div class="meta-value">{{ song.keyword }}</div>
+                </div>
+
+                <div class="meta-item">
+                    <div class="meta-label">原始链接</div>
+                    <div class="meta-value">
+                        <a href="{{ song.source_url }}" target="_blank">
+                            打开酷我页面
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-head">
+                <h2 class="section-title">歌词</h2>
+            </div>
+
+            <div class="lyrics-box">
+                {{ song.lyrics }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-head">
+                <h2 class="section-title">同歌手其他歌曲</h2>
+            </div>
+
+            <ul class="related-list">
+                {% for related_song in related_songs %}
+                    <li>
+                        <a href="{% url 'music:song_detail' related_song.id %}">
+                            {{ related_song.song_name }}
+                        </a>
+
+                        <span style="color: #6b7280;">
+                            · {{ related_song.album }}
+                        </span>
+                    </li>
+                {% empty %}
+                    <li>暂无相关歌曲。</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="section-head">
+                <h2 class="section-title">评论区</h2>
+            </div>
+
+            <form method="post" class="comment-form">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="nickname">昵称</label>
+
+                    <input
+                        id="nickname"
+                        type="text"
+                        name="nickname"
+                        placeholder="不填写则默认匿名用户"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="content">评论内容</label>
+
+                    <textarea
+                        id="content"
+                        name="content"
+                        rows="4"
+                        placeholder="写下你对这首歌的评论"
+                    ></textarea>
+                </div>
+
+                {% if comment_error %}
+                    <div class="form-error">
+                        {{ comment_error }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="submit-btn">
+                    提交评论
+                </button>
+            </form>
+
+            <div class="comment-list">
+                {% for comment in comments %}
+
+                    <div class="comment-item">
+                        <div class="comment-head">
+                            <div class="comment-meta">
+                                {{ comment.nickname }}
+                                ·
+                                {{ comment.created_at|localtime|date:"Y-m-d H:i" }}
+                            </div>
+
+                            <form
+                                method="post"
+                                action="{% url 'music:delete_comment' comment.id %}"
+                                class="delete-form"
+                                onsubmit="return confirm('确定删除这条评论吗？');"
+                            >
+                                {% csrf_token %}
+
+                                <button type="submit" class="delete-btn">
+                                    删除
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="comment-content">
+                            {{ comment.content }}
+                        </div>
+                    </div>
+
+                {% empty %}
+                    <p style="color: #6b7280;">
+                        暂无评论，快来发表第一条评论。
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

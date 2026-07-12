@@ -1,0 +1,125 @@
+{% extends "music/base.html" %}
+
+{% block title %}
+首页 - Changmusic
+{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+    <div class="hero-badge">Django · Kuwo Music · Web System</div>
+
+    <h1>Changmusic</h1>
+
+    <p>
+        一个基于 Django 的音乐信息展示系统。系统整合酷我音乐歌曲、歌手、歌词与评论数据，
+        支持歌曲浏览、歌手信息展示、关键词搜索、分页查看和用户评论。
+    </p>
+
+    <div class="hero-actions">
+        <a class="btn btn-light" href="{% url 'music:song_list' %}">浏览歌曲</a>
+        <a class="btn btn-outline" href="{% url 'music:artist_list' %}">查看歌手</a>
+        <a class="btn btn-light" href="{% url 'music:search' %}">立即搜索</a>
+    </div>
+    <div class="hero-music-note" aria-hidden="true">♫</div>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ artist_count }}</div>
+        <div class="stat-label">收录歌手</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number">{{ song_count }}</div>
+        <div class="stat-label">收录歌曲</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number">{{ comment_count }}</div>
+        <div class="stat-label">用户评论</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="section-head">
+        <h2 class="section-title">精选歌曲</h2>
+        <a class="section-link" href="{% url 'music:song_list' %}">查看全部</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>歌曲名</th>
+                <th>歌手</th>
+                <th>专辑</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for song in latest_songs %}
+                <tr>
+                    <td>
+                        <a href="{% url 'music:song_detail' song.id %}">
+                            {{ song.song_name }}
+                        </a>
+                    </td>
+                    <td>{{ song.artist_name }}</td>
+                    <td>{{ song.album }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">暂无歌曲数据</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <div class="section-head">
+        <h2 class="section-title">歌手速览</h2>
+        <a class="section-link" href="{% url 'music:artist_list' %}">查看全部</a>
+    </div>
+
+    <div class="tag-list">
+        {% for artist in popular_artists %}
+            <a class="tag" href="{% url 'music:artist_detail' artist.id %}" style="text-decoration: none;">
+                {{ artist.artist_name }}
+            </a>
+        {% empty %}
+            <span class="tag">暂无歌手数据</span>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="section-head">
+        <h2 class="section-title">系统功能</h2>
+    </div>
+
+    <div class="analysis-grid">
+        <div>
+            <h3>歌曲浏览</h3>
+            <p style="color: #6b7280; line-height: 1.8;">
+                支持歌曲分页展示、关键词搜索、歌曲详情查看、歌词展示和原始链接跳转。
+            </p>
+        </div>
+
+        <div>
+            <h3>歌手信息</h3>
+            <p style="color: #6b7280; line-height: 1.8;">
+                支持歌手列表浏览、歌手详情查看、简介展示和该歌手相关歌曲展示。
+            </p>
+        </div>
+
+        <div>
+            <h3>评论功能</h3>
+            <p style="color: #6b7280; line-height: 1.8;">
+                用户可以在歌曲详情页提交评论，评论数据会写入数据库并在页面中展示。
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

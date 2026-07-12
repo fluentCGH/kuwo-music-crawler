@@ -1,0 +1,628 @@
+:root {
+    --bg: #f4f6fb;
+    --primary: #4f46e5;
+    --primary-light: #eef2ff;
+    --text: #111827;
+    --muted: #6b7280;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 顶部导航栏 */
+
+.navbar {
+    height: 72px;
+    padding: 0 56px;
+    background: #111827;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-main {
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.brand-sub {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #a5b4fc;
+}
+
+.navbar-links a {
+    color: white;
+    margin-left: 28px;
+    font-weight: 600;
+}
+
+.navbar-links a:hover {
+    color: #a5b4fc;
+    text-decoration: none;
+}
+
+/* 页面公共布局 */
+
+.container {
+    max-width: 1180px;
+    margin: 36px auto;
+    padding: 0 28px;
+}
+
+.card,
+.stat-card,
+.cover-card,
+.artist-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+.card {
+    margin-bottom: 28px;
+}
+
+.artist-card {
+    display: block;
+    color: var(--text);
+}
+
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 28px;
+}
+
+.section-link {
+    font-weight: 700;
+}
+
+/* 首页 */
+
+.hero {
+    border-radius: 28px;
+    padding: 48px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: 52px;
+}
+
+.hero p {
+    max-width: 760px;
+    line-height: 1.8;
+    color: #eef2ff;
+}
+
+.hero-actions {
+    margin-top: 28px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    margin-right: 12px;
+}
+
+.btn-light {
+    background: white;
+    color: var(--primary);
+}
+
+.btn-outline {
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* 统计卡片 */
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin: 28px 0;
+}
+
+.stat-number {
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--primary);
+}
+
+.stat-label {
+    margin-top: 8px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+/* 表格 */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background: #f8fafc;
+    color: #374151;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.table tr:hover td {
+    background: #fafafa;
+}
+
+/* 搜索框 */
+
+.search-box {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.search-box input,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+}
+.search-box input {
+    flex: 1;
+}
+
+
+.search-box button,
+.submit-btn {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* 分页 */
+
+.pagination {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 9px 13px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid var(--border);
+}
+
+.pagination .current {
+    background: var(--primary);
+    color: white;
+}
+
+/* 标签 */
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.tag {
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* 歌曲详情页 */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.cover-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+    object-fit: cover;
+    background: #f3f4f6;
+}
+
+.song-title {
+    font-size: 40px;
+    margin: 0 0 12px;
+}
+
+.song-subtitle {
+    color: var(--muted);
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.meta-item {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.meta-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.meta-value {
+    font-weight: 700;
+    word-break: break-all;
+}
+
+.lyrics-box {
+    white-space: pre-line;
+    line-height: 2;
+    background: #fbfdff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    max-height: 680px;
+    overflow-y: auto;
+}
+
+.related-list {
+    list-style: none;
+    padding: 0;
+}
+
+.related-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+/* 评论区 */
+
+.comment-form {
+    margin-bottom: 26px;
+    padding: 20px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.form-error {
+    margin-bottom: 14px;
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.comment-item {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.comment-meta {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    font-weight: 700;
+}
+
+/* 歌手页面 */
+
+.artist-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+
+.artist-card:hover {
+    transform: translateY(-3px);
+    text-decoration: none;
+}
+
+.artist-avatar {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+    object-fit: cover;
+    background: #f3f4f6;
+}
+
+.artist-name {
+    margin-top: 14px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.artist-meta {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.artist-hero {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+}
+
+.artist-large-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    object-fit: cover;
+    box-shadow: var(--shadow);
+}
+
+.artist-intro {
+    line-height: 1.9;
+    color: #374151;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+/* 首页功能块 */
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* 底部 */
+
+.footer {
+    padding: 36px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.comment-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.delete-form {
+    margin: 0;
+}
+
+.delete-btn {
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    color: #dc2626;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+.comment-content {
+    line-height: 1.7;
+}
+.page-jump-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.page-jump-form input {
+    width: 70px;
+    padding: 9px 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.page-jump-form button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary);
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.page-jump-form span {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: var(--text);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-music-note {
+    position: absolute;
+    right: 40px;
+    bottom: 20px;
+    font-size: 180px;
+    font-weight: bold;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* 搜索类型单选组 */
+
+.search-type-group {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.search-type-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.search-type-option input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+}
+
+
+/* 搜索结果统计 */
+
+.search-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+    color: var(--muted);
+}
+
+
+/* 歌曲图片卡片 */
+
+.song-card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.song-card {
+    display: block;
+    color: var(--text);
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.song-card:hover {
+    text-decoration: none;
+}
+
+.song-card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    object-fit: cover;
+    background: #f3f4f6;
+}
+
+.song-card-name {
+    margin-top: 12px;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.song-card-meta {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+
+/* 窗口较窄时减少列数 */
+
+@media (max-width: 900px) {
+    .song-card-grid,
+    .artist-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
