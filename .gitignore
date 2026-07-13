@@ -21,15 +21,10 @@ db.sqlite3
 *.sqlite3
 
 
-# ==============================
-# 爬虫生成的完整数据
-# 保留三个小型样例文件
-# ==============================
-data/*
-
-!data/artist_sample.json
-!data/lyrics_sample.json
-!data/songs_sample.json
+# 只忽略三个测试样例文件
+data/artist_sample.json
+data/lyrics_sample.json
+data/songs_sample.json
 
 
 # ==============================
