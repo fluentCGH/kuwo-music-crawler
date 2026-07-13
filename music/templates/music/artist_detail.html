@@ -97,7 +97,21 @@
             </a>
         {% endif %}
 
-        <span class="current">
+        {% for num in page_obj.paginator.page_range %}
+            {% if num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+
+                {% if num == page_obj.number %}
+                    <span class="current">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}">
+                        {{ num }}
+                    </a>
+                {% endif %}
+
+            {% endif %}
+        {% endfor %}
+
+        <span class="page-summary">
             第 {{ page_obj.number }} 页 /
             共 {{ page_obj.paginator.num_pages }} 页
         </span>
@@ -114,58 +128,13 @@
     </div>
 </div>
 
-    <div class="artist-intro">
-        {{ artist.artist_intro }}
-    </div>
-</div>
-
 <div class="card">
     <div class="section-head">
-        <h2 class="section-title">该歌手相关歌曲</h2>
+        <h2 class="section-title">歌手简介</h2>
     </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>歌曲名</th>
-                <th>专辑</th>
-                <th>时长</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for song in page_obj %}
-                <tr>
-                    <td>
-                        <a href="{% url 'music:song_detail' song.id %}">
-                            {{ song.song_name }}
-                        </a>
-                    </td>
-                    <td>{{ song.album }}</td>
-                    <td>{{ song.duration }} 秒</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3">暂无关联歌曲。</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">首页</a>
-            <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
-        {% endif %}
-
-        <span class="current">
-            第 {{ page_obj.number }} 页 / 共 {{ page_obj.paginator.num_pages }} 页
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">下一页</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">末页</a>
-        {% endif %}
+    <div class="artist-intro">
+        {{ artist.artist_intro }}
     </div>
 </div>
 
